@@ -36,5 +36,6 @@ install(FILES
         "${CMAKE_CURRENT_BINARY_DIR}/avr-toolchain.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/AvrToolchainConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/AvrToolchainConfigVersion.cmake"
+        "${CMAKE_CURRENT_SOURCE_DIR}/ArduinoConfig.cmake"
         DESTINATION ${qualified_install_cmakedir}
 )

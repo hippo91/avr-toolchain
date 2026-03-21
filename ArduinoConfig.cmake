@@ -31,6 +31,10 @@ set(PROC
     __AVR_ATmega328P__
     CACHE STRING "Processeur defines")
 
+set(PROC_ID
+  __AVR_ATmega328P__
+  CACHE STRING "MCU include guard")
+
 # The programmer to use, read avrdude manual for list
 set(PROG_TYPE
     arduino

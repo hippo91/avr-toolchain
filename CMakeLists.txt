@@ -22,7 +22,6 @@ set(qualified_install_libdir ${CMAKE_INSTALL_LIBDIR}/AvrToolchain)
 set(qualified_install_cmakedir ${CMAKE_INSTALL_LIBDIR}/AvrToolchain/cmake)
 set(qualified_install_incdir ${CMAKE_INSTALL_INCLUDEDIR}/AvrToolchain)
 
-
 include(CMakePackageConfigHelpers)
 
 # generate the version file for the config file

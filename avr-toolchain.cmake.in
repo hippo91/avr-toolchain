@@ -5,8 +5,7 @@ set(CMAKE_C_COMPILER avr-gcc)
 set(CMAKE_ASM_COMPILER avr-gcc)
 
 # where is the target environment located
-set(CMAKE_FIND_ROOT_PATH /usr/lib/avr)
-set(CMAKE_SYSROOT /usr/lib/avr)
+set(CMAKE_SYSROOT @CMAKE_SYSROOT@)
 
 # where to install cross-compiled files
 set(CMAKE_STAGING_PREFIX @CMAKE_INSTALL_PREFIX@)

@@ -3,6 +3,9 @@ cmake_minimum_required( VERSION 3.10 )
 # Even if there is nothing to compile/build in this project
 # this is necessary so that compiler tests are done
 # and correct version file (with correct 16/32/64 bits specifications) is generated
+if(NOT CMAKE_SYSROOT)
+  set(CMAKE_SYSROOT "/usr/bin/avr")
+endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/avr-toolchain.cmake @ONLY)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/avr-toolchain.cmake")
 # Project name

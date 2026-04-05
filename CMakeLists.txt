@@ -27,6 +27,12 @@ if(NOT CMAKE_SYSROOT)
   endif()
 endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/avr-toolchain.cmake @ONLY)
+# Set the toolchain file BEFORE project() call
+# This is necessary and intentional, not a bug:
+# - Forces CMake to load and test the AVR compilers during configuration
+# - Ensures proper compiler detection for architecture validation
+# - Validates that CMAKE_SIZEOF_VOID_P=2 (16-bit pointers for AVR)
+# - Generates correct architecture specifications for downstream projects
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/avr-toolchain.cmake")
 # Project name
 project("avr toolchain (for Arduino and others)" VERSION 1.0.0)

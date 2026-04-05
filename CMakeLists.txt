@@ -45,6 +45,10 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     ${CMAKE_SOURCE_DIR}/CMakeCache.txt")
 endif()
 
+if(NOT CMAKE_SIZEOF_VOID_P EQUAL 2)
+    message(FATAL_ERROR "AVR requires 16-bit pointers")
+endif()
+
 # make cache variables for install destinations
 include(GNUInstallDirs)
 set(qualified_install_libdir ${CMAKE_INSTALL_LIBDIR}/AvrToolchain)

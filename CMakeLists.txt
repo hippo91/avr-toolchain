@@ -4,7 +4,27 @@ cmake_minimum_required( VERSION 3.10 )
 # this is necessary so that compiler tests are done
 # and correct version file (with correct 16/32/64 bits specifications) is generated
 if(NOT CMAKE_SYSROOT)
-  set(CMAKE_SYSROOT "/usr/bin/avr")
+  if(DEFINED ENV{AVR_TOOLCHAIN_PATH})
+    set(CMAKE_SYSROOT "$ENV{AVR_TOOLCHAIN_PATH}")
+    message(STATUS "AVR toolchain path from AVR_TOOLCHAIN_PATH environment variable: ${CMAKE_SYSROOT}")
+  elseif(DEFINED ENV{AVR_SYSROOT})
+    set(CMAKE_SYSROOT "$ENV{AVR_SYSROOT}")
+    message(STATUS "AVR toolchain path from AVR_SYSROOT environment variable: ${CMAKE_SYSROOT}")
+  else()
+    # Fall back to common installation paths
+    foreach(path IN ITEMS "/usr" "/usr/local" "/opt/avr")
+      if(EXISTS "${path}/bin/avr-gcc")
+        set(CMAKE_SYSROOT ${path})
+        message(STATUS "AVR toolchain found at: ${CMAKE_SYSROOT}")
+        break()
+      endif()
+    endforeach()
+  endif()
+  
+  if(NOT CMAKE_SYSROOT)
+    message(FATAL_ERROR 
+      "AVR toolchain not found. Please set CMAKE_SYSROOT manually or set the AVR_TOOLCHAIN_PATH or AVR_SYSROOT environment variable.")
+  endif()
 endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/avr-toolchain.cmake @ONLY)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/avr-toolchain.cmake")

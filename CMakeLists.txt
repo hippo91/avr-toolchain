@@ -15,8 +15,8 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     message(FATAL_ERROR
     "In source build is prohibited!\
     Please remove manually the following CMake generated files:\
-    ${srcdir}/CMakeFiles\
-    ${srcdir}/CMakeCache.txt")
+    ${CMAKE_SOURCE_DIR}/CMakeFiles\
+    ${CMAKE_SOURCE_DIR}/CMakeCache.txt")
 endif()
 
 # make cache variables for install destinations
@@ -30,7 +30,7 @@ include(CMakePackageConfigHelpers)
 # generate the version file for the config file
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/AvrToolchainConfigVersion.cmake"
-  VERSION "${version}"
+  VERSION "${PROJECT_VERSION}"
   COMPATIBILITY AnyNewerVersion
 )
 

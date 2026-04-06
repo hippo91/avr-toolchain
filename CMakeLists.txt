@@ -1,8 +1,7 @@
 cmake_minimum_required( VERSION 3.10 )
-# Configure the toolchain and use it
-# Even if there is nothing to compile/build in this project
-# this is necessary so that compiler tests are done
-# and correct version file (with correct 16/32/64 bits specifications) is generated
+
+# Search for sysroot in the environment otherwise try
+# to locate avr-gcc to determine sysroot
 if(NOT CMAKE_SYSROOT)
   if(DEFINED ENV{AVR_TOOLCHAIN_PATH})
     set(CMAKE_SYSROOT "$ENV{AVR_TOOLCHAIN_PATH}")
@@ -26,6 +25,7 @@ if(NOT CMAKE_SYSROOT)
       "AVR toolchain not found. Please set CMAKE_SYSROOT manually or set the AVR_TOOLCHAIN_PATH or AVR_SYSROOT environment variable.")
   endif()
 endif()
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/avr-toolchain.cmake @ONLY)
 # Set the toolchain file BEFORE project() call
 # This is necessary and intentional, not a bug:
@@ -34,7 +34,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in ${CMAKE_CURREN
 # - Validates that CMAKE_SIZEOF_VOID_P=2 (16-bit pointers for AVR)
 # - Generates correct architecture specifications for downstream projects
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/avr-toolchain.cmake")
-# Project name
 project("avr toolchain (for Arduino and others)" VERSION 1.0.0)
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
@@ -45,6 +44,8 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     ${CMAKE_SOURCE_DIR}/CMakeCache.txt")
 endif()
 
+# Ensure the toolchain is correctly set up
+# by checking that the size of pointer is 16-bit
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 2)
     message(FATAL_ERROR "AVR requires 16-bit pointers")
 endif()

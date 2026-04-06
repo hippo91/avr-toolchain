@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
+file(STRINGS Version.txt AVR_TOOLCHAIN_VERSION)
+
 # Search for sysroot in the environment otherwise try to locate avr-gcc to
 # determine sysroot
 if(NOT CMAKE_SYSROOT)
@@ -42,7 +44,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in
 # validation - Validates that CMAKE_SIZEOF_VOID_P=2 (16-bit pointers for AVR) -
 # Generates correct architecture specifications for downstream projects
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/avr-toolchain.cmake")
-project("avr toolchain (for Arduino and others)" VERSION 1.0.0)
+project("avr toolchain (for Arduino and others)" VERSION "${AVR_TOOLCHAIN_VERSION}")
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
   message(

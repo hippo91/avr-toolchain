@@ -1,9 +1,9 @@
-# #################################
+# ##############################################################################
 # Arduino Uno Board Configuration
-# #################################
+# ##############################################################################
 
 # ^^^^^^^^^^^^^^^^^^^^^
-# Variables definitions 
+# Variables definitions
 # ^^^^^^^^^^^^^^^^^^^^^
 
 # Set frequency of the crystal
@@ -40,8 +40,8 @@ set(PROC
     CACHE STRING "Processeur defines")
 
 set(PROC_ID
-  __AVR_ATmega328P__
-  CACHE STRING "MCU include guard")
+    __AVR_ATmega328P__
+    CACHE STRING "MCU include guard")
 
 # The programmer to use, read avrdude manual for list
 set(PROG_TYPE
@@ -49,16 +49,9 @@ set(PROG_TYPE
     CACHE STRING "Programmer to use")
 
 # ^^^^^^^^^^^^^^^^^^^^^^^^^
-# Compiler and linker setup 
+# Compiler and linker setup
 # ^^^^^^^^^^^^^^^^^^^^^^^^^
-add_compile_definitions(
-  -DF_CPU=${F_CPU}
-  -D${PROC_ID}
-)
+add_compile_definitions(-DF_CPU=${F_CPU} -D${PROC_ID})
 # mmcu MUST be passed to both the compiler and linker, this handle the linker
-add_compile_options(
-  -mmcu=${MCU}
-)
-add_link_options(
-  -mmcu=${MCU}
-)
+add_compile_options(-mmcu=${MCU})
+add_link_options(-mmcu=${MCU})

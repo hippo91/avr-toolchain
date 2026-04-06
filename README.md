@@ -10,15 +10,15 @@ This project provides a fully CMake-compatible toolchain for building AVR microc
    cd avr-toolchain
    ```
 
-2. Build and install:
+2. Install:
    ```
    mkdir build
    cd build
    cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_SYSROOT=/path/to/avr/gcc ..
-   make
    make install
    ```
 
+   **Note:** There are no file to compile in this project, that's why the build step is useless
    **Note:** You must specify `CMAKE_INSTALL_PREFIX` to set the installation directory. This prefix will also be used as `CMAKE_STAGING_PREFIX` for all downstream AVR projects using this toolchain. Optionally, set `CMAKE_SYSROOT` to the path where AVR GCC is installed. If not set, this project will try to locate AVR GCC in standard places.
 
 ## Usage

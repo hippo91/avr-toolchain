@@ -1,4 +1,12 @@
-# AVR Chip Configuration Set frequency of the crystal on your board,
+# #################################
+# Arduino Uno Board Configuration
+# #################################
+
+# ^^^^^^^^^^^^^^^^^^^^^
+# Variables definitions 
+# ^^^^^^^^^^^^^^^^^^^^^
+
+# Set frequency of the crystal
 set(F_CPU
     16000000UL
     CACHE STRING "Crystal board frequency")
@@ -39,3 +47,18 @@ set(PROC_ID
 set(PROG_TYPE
     arduino
     CACHE STRING "Programmer to use")
+
+# ^^^^^^^^^^^^^^^^^^^^^^^^^
+# Compiler and linker setup 
+# ^^^^^^^^^^^^^^^^^^^^^^^^^
+add_compile_definitions(
+  -DF_CPU=${F_CPU}
+  -D${PROC_ID}
+)
+# mmcu MUST be passed to both the compiler and linker, this handle the linker
+add_compile_options(
+  -mmcu=${MCU}
+)
+add_link_options(
+  -mmcu=${MCU}
+)

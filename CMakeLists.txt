@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.10 )
+cmake_minimum_required( VERSION 3.13 )
 
 # Search for sysroot in the environment otherwise try
 # to locate avr-gcc to determine sysroot

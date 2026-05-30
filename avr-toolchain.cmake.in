@@ -18,3 +18,51 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+add_compile_options(
+  -Os # Optimise pour la taille du code (plutôt que la vitesse) Doc:
+      # https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#Optimize-Options
+  -Wno-main # Désactive l'avertissement si la fonction main n'est pas standard
+            # (utile pour certains systèmes embarqués) Doc:
+            # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wno-main
+  -Wstrict-prototypes # Exige les prototypes de fonction en C (obsolète en C++)
+                      # Doc:
+                      # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstrict-prototypes
+  -funsigned-char # Le type 'char' est non signé par défaut (utile pour AVR)
+                  # Doc:
+                  # https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html#index-funsigned_002dchar
+  # Optimisations spécifiques pour les microcontrôleurs (notamment AVR)
+  -funsigned-bitfields # Les champs de bits sont non signés par défaut (utile
+                       # pour AVR) Doc:
+                       # https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html#index-funsigned_002dbitfields
+  -fpack-struct # Élimine les trous d'alignement dans les structures (réduit la
+                # taille mémoire)
+  # Doc:
+  # https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fpack_002dstruct
+  -fshort-enums # Utilise le plus petit type entier possible pour les
+                # énumérations
+  # Doc:
+  # https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fshort_002denums
+  -ffunction-sections # Place chaque fonction dans sa propre section (permet
+                      # --gc-sections)
+  # Doc:
+  # https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-ffunction_002dsections
+  -fdata-sections # Place chaque variable globale dans sa propre section (permet
+                  # --gc-sections)
+  # Doc:
+  # https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fdata_002dsections
+  -fno-split-wide-types # Désactive la division des types larges (peut causer
+                        # des bugs sur AVR)
+  # Doc:
+  # https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fno_002dsplit_002dwide_002dtypes
+  -fno-tree-scev-cprop # Désactive une optimisation spécifique (peut causer des
+                       # bugs sur AVR)
+  # Doc:
+  # https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-fno_002dtree_002dscev_002dcprop
+)
+
+add_link_options(
+  --gc-sections # Permet au linker d'éliminer les sections non
+                                  # utilisées et d'optimiser les sauts
+  # Doc: https://gcc.gnu.org/onlinedocs/ld/Options.html#index-gc_002dsections
+)

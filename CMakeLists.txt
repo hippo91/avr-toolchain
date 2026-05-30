@@ -58,7 +58,7 @@ endif()
 # Ensure the toolchain is correctly set up by checking that the size of pointer
 # is 16-bit
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 2)
-  message(FATAL_ERROR "AVR requires 16-bit pointers")
+  message(FATAL_ERROR "AVR requires 16-bit pointers. Actual size: ${CMAKE_SIZEOF_VOID_P} bytes")
 endif()
 
 # make cache variables for install destinations

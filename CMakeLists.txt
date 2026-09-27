@@ -55,13 +55,24 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     ${CMAKE_SOURCE_DIR}/CMakeCache.txt")
 endif()
 
+include(CheckTypeSize)
+list(APPEND CMAKE_REQUIRED_LINK_OPTIONS "LINKER:--no-gc-sections")
+message(DEBUG "CMAKE_REQUIRED_LINK_OPTIONS = ${CMAKE_REQUIRED_LINK_OPTIONS}")
+check_type_size("void*" SIZE_OF_VOID_PTR)
+message(STATUS "HAVE_SIZE_OF_VOID_PTR = ${HAVE_SIZE_OF_VOID_PTR}")
+message(STATUS "SIZE_OF_VOID_PTR = ${SIZE_OF_VOID_PTR}")
+message(STATUS "SIZE_OF_VOID_PTR_CODE = ${SIZE_OF_VOID_PTR_CODE}")
+list(REMOVE_ITEM CMAKE_REQUIRED_LINK_OPTIONS "LINKER:--no-gc-sections")
+message(DEBUG "CMAKE_REQUIRED_LINK_OPTIONS = ${CMAKE_REQUIRED_LINK_OPTIONS}")
+
 # Ensure the toolchain is correctly set up by checking that the size of pointer
 # is 16-bit
-if(NOT CMAKE_SIZEOF_VOID_P EQUAL 2)
-  message(FATAL_ERROR "AVR requires 16-bit pointers. Actual size: ${CMAKE_SIZEOF_VOID_P} bytes")
+if(NOT SIZE_OF_VOID_PTR EQUAL 2)
+  message(FATAL_ERROR "AVR requires 16-bit pointers. Actual size: ${SIZE_OF_VOID_PTR} bytes")
 endif()
 
-# make cache variables for install destinations
+# For now using GNUInstallDir generate a false positive warning about the CMAKE_INSTALL_LIBDIR variable not being set.
+# See https://gitlab.kitware.com/cmake/cmake/-/issues/23461 for more details.
 include(GNUInstallDirs)
 set(qualified_install_libdir ${CMAKE_INSTALL_LIBDIR}/AvrToolchain)
 set(qualified_install_cmakedir ${CMAKE_INSTALL_LIBDIR}/AvrToolchain/cmake)

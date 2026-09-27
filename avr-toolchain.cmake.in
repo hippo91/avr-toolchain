@@ -54,7 +54,6 @@ add_compile_options(
                        # https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-fno_002dtree_002dscev_002dcprop
 )
 
-# add_link_options(
-#   --gc-sections # Allows the linker to eliminate unused sections and optimize jumps
-#   # Doc: https://gcc.gnu.org/onlinedocs/ld/Options.html#index-gc_002dsections
-# )
+# Allows the linker to eliminate unused sections and optimize jumps
+# Doc: https://gcc.gnu.org/onlinedocs/ld/Options.html#index-gc_002dsections
+add_link_options(LINKER:--gc-sections)

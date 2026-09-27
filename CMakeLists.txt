@@ -55,21 +55,25 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     ${CMAKE_SOURCE_DIR}/CMakeCache.txt")
 endif()
 
+# Ensure the toolchain is correctly set up by checking that the size of pointer
+# is 2 bytes
+message(CHECK_START "Check for AVR pointer size")
 include(CheckTypeSize)
 list(APPEND CMAKE_REQUIRED_LINK_OPTIONS "LINKER:--no-gc-sections")
-message(DEBUG "CMAKE_REQUIRED_LINK_OPTIONS = ${CMAKE_REQUIRED_LINK_OPTIONS}")
 check_type_size("void*" SIZE_OF_VOID_PTR)
-message(STATUS "HAVE_SIZE_OF_VOID_PTR = ${HAVE_SIZE_OF_VOID_PTR}")
-message(STATUS "SIZE_OF_VOID_PTR = ${SIZE_OF_VOID_PTR}")
-message(STATUS "SIZE_OF_VOID_PTR_CODE = ${SIZE_OF_VOID_PTR_CODE}")
 list(REMOVE_ITEM CMAKE_REQUIRED_LINK_OPTIONS "LINKER:--no-gc-sections")
 message(DEBUG "CMAKE_REQUIRED_LINK_OPTIONS = ${CMAKE_REQUIRED_LINK_OPTIONS}")
-
-# Ensure the toolchain is correctly set up by checking that the size of pointer
-# is 16-bit
-if(NOT SIZE_OF_VOID_PTR EQUAL 2)
-  message(FATAL_ERROR "AVR requires 16-bit pointers. Actual size: ${SIZE_OF_VOID_PTR} bytes")
+if(NOT HAVE_SIZE_OF_VOID_PTR)
+  set(ERR_MSG "Failed to determine the size of pointer for AVR toolchain")
+  message(CHECK_FAIL ${ERR_MSG})
+  message(FATAL_ERROR ${ERR_MSG})
 endif()
+if(NOT SIZE_OF_VOID_PTR EQUAL 2)
+  set(ERR_MSG "AVR requires 2 bytes pointers. Actual size: ${SIZE_OF_VOID_PTR} bytes")
+  message(CHECK_FAIL ${ERR_MSG})
+  message(FATAL_ERROR ${ERR_MSG})
+endif()
+message(CHECK_PASS "AVR pointer size is 2 bytes")
 
 # For now using GNUInstallDir generate a false positive warning about the CMAKE_INSTALL_LIBDIR variable not being set.
 # See https://gitlab.kitware.com/cmake/cmake/-/issues/23461 for more details.

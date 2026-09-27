@@ -38,11 +38,12 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/avr-toolchain.cmake @ONLY)
-# Set the toolchain file BEFORE project() call This is necessary and
-# intentional, not a bug: - Forces CMake to load and test the AVR compilers
-# during configuration - Ensures proper compiler detection for architecture
-# validation - Validates that CMAKE_SIZEOF_VOID_P=2 (16-bit pointers for AVR) -
-# Generates correct architecture specifications for downstream projects
+# Set the toolchain file BEFORE project() call.
+# This is necessary and intentional, not a bug:
+# - Forces CMake to load and test the AVR compilers during configuration
+# - Ensures proper compiler detection for architecture validation
+# - Validates that pointer size is 2 bytes
+# - Generates correct architecture specifications for downstream projects
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/avr-toolchain.cmake")
 project("avr toolchain (for Arduino and others)" VERSION "${AVR_TOOLCHAIN_VERSION}")
 
@@ -57,6 +58,10 @@ endif()
 
 # Ensure the toolchain is correctly set up by checking that the size of pointer
 # is 2 bytes
+# Do not use the CMAKE_SIZEOF_VOID_P variable as it is not reliable for cross-compiling scenarios 
+# when using --gc-sections linker option, which is common in AVR toolchain.
+# See https://gitlab.kitware.com/cmake/cmake/-/issues/28120 for more details.
+# Instead, we perform a direct check using check_type_size.
 message(CHECK_START "Check for AVR pointer size")
 include(CheckTypeSize)
 list(APPEND CMAKE_REQUIRED_LINK_OPTIONS "LINKER:--no-gc-sections")

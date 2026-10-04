@@ -58,23 +58,9 @@ endif()
 
 # Ensure the toolchain is correctly set up by checking that the size of pointer
 # is 2 bytes
-# Do not use the CMAKE_SIZEOF_VOID_P variable as it is not reliable for cross-compiling scenarios 
-# when using --gc-sections linker option, which is common in AVR toolchain.
-# See https://gitlab.kitware.com/cmake/cmake/-/issues/28120 for more details.
-# Instead, we perform a direct check using check_type_size.
 message(CHECK_START "Check for AVR pointer size")
-include(CheckTypeSize)
-list(APPEND CMAKE_REQUIRED_LINK_OPTIONS "LINKER:--no-gc-sections")
-check_type_size("void*" SIZE_OF_VOID_PTR)
-list(REMOVE_ITEM CMAKE_REQUIRED_LINK_OPTIONS "LINKER:--no-gc-sections")
-message(DEBUG "CMAKE_REQUIRED_LINK_OPTIONS = ${CMAKE_REQUIRED_LINK_OPTIONS}")
-if(NOT HAVE_SIZE_OF_VOID_PTR)
-  set(ERR_MSG "Failed to determine the size of pointer for AVR toolchain")
-  message(CHECK_FAIL ${ERR_MSG})
-  message(FATAL_ERROR ${ERR_MSG})
-endif()
-if(NOT SIZE_OF_VOID_PTR EQUAL 2)
-  set(ERR_MSG "AVR requires 2 bytes pointers. Actual size: ${SIZE_OF_VOID_PTR} bytes")
+if(NOT CMAKE_SIZEOF_VOID_P EQUAL 2)
+  set(ERR_MSG "AVR requires 2 bytes pointers. Actual size: ${CMAKE_SIZEOF_VOID_P} bytes")
   message(CHECK_FAIL ${ERR_MSG})
   message(FATAL_ERROR ${ERR_MSG})
 endif()

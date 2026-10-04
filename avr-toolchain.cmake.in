@@ -56,4 +56,8 @@ add_compile_options(
 
 # Allows the linker to eliminate unused sections and optimize jumps
 # Doc: https://gcc.gnu.org/onlinedocs/ld/Options.html#index-gc_002dsections
-add_link_options(LINKER:--gc-sections)
+# -u,main is to prevent --gc-sections to remove main function when it is not
+# used, as in the cmake test programs that are used to determine compiler's abi
+# Without this option cmake won't be able to determine properly the compiler's abi
+# see: https://gitlab.kitware.com/cmake/cmake/-/work_items/28120 
+add_link_options(LINKER:--gc-sections,-u,main)

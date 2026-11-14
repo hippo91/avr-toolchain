@@ -87,3 +87,7 @@ install(
         "${CMAKE_CURRENT_BINARY_DIR}/AvrToolchainConfigVersion.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/ArduinoUnoConfig.cmake"
   DESTINATION ${qualified_install_cmakedir})
+
+
+enable_testing()
+add_subdirectory(tests)

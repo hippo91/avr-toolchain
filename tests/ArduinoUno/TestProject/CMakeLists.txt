@@ -11,8 +11,11 @@ project("Atmega328p serial debugging" VERSION 1.0.0)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+set(exe_name "TestArduinoUno")
+add_executable(${exe_name})
+target_sources(${exe_name} PRIVATE blink.c)
 
 

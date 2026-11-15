@@ -24,7 +24,7 @@ cmake --install build
 
 This repository does not build a library or executable, so `cmake --build` is not needed. Configuration generates the toolchain file, and installation places it and the CMake package files under `${CMAKE_INSTALL_LIBDIR}/AvrToolchain/cmake` (typically `/usr/local/lib/AvrToolchain/cmake`). The configured install prefix is also used as `CMAKE_STAGING_PREFIX` by AVR projects using this toolchain.
 
-If `CMAKE_SYSROOT` is omitted, configuration checks the `AVR_TOOLCHAIN_PATH` and `AVR_SYSROOT` environment variables, then looks for `avr-gcc` under `/usr`, `/usr/local`, and `/opt/avr`. For example, set one of these variables to the AVR GCC installation prefix before configuring:
+If `CMAKE_SYSROOT` is omitted, configuration searches for `avr-gcc` using the `AVR_TOOLCHAIN_PATH` and `AVR_SYSROOT` environment variables, `CMAKE_PREFIX_PATH`, the system `PATH`, and common prefixes such as `/usr`, `/usr/local`, and `/opt/avr`. For example, set one of these environment variables to the AVR GCC installation prefix before configuring:
 
 ```sh
 export AVR_SYSROOT=/path/to/avr/gcc
@@ -67,6 +67,12 @@ cmake -S /path/to/MyAvrProject -B /path/to/MyAvrProject/build \
 ```
 
 If changing `MCU`, also ensure the processor macros (`PROC` and `PROC_ID`) match the selected device. Only `ArduinoUno` is currently supported; `avr_select_board()` reports an error for other board names.
+
+## Compiler flags and binary compatibility
+
+The toolchain applies AVR-oriented compiler flags globally to the project. In particular, `-fpack-struct`, `-fshort-enums`, `-funsigned-char`, and `-funsigned-bitfields` are enabled by default to favor compact firmware and AVR-specific type conventions. These flags can change data layout or type semantics, so they are an intentional whole-build policy rather than optional per-target tweaks.
+
+Compile application code and source-built libraries with the same toolchain settings. Prebuilt libraries or other objects compiled with different settings may not be binary-compatible, especially when interfaces pass or expose structures, enums, `char`, or bitfields. If a project depends on such binaries, verify compatibility before using these defaults.
 
 ## Troubleshooting
 

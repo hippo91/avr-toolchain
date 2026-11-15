@@ -23,7 +23,7 @@ set(AVR_TOOLCHAIN_PATH
 # param board_name : name of the board
 # ##############################################################################
 function(avr_select_board board_name)
-  if(${board_name} STREQUAL "ArduinoUno")
+  if(board_name STREQUAL "ArduinoUno")
     message(STATUS "Selected board : ArduinoUno")
     include(${AVR_TOOLCHAIN_PACKAGE_PREFIX_DIR}/ArduinoUnoConfig.cmake)
   else()

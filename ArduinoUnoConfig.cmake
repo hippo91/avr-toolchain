@@ -35,10 +35,6 @@ set(MCU
     atmega328p
     CACHE STRING "Processor")
 
-set(PROC
-    __AVR_ATmega328P__
-    CACHE STRING "Processeur defines")
-
 set(PROC_ID
     __AVR_ATmega328P__
     CACHE STRING "MCU include guard")
@@ -51,7 +47,7 @@ set(PROG_TYPE
 # ^^^^^^^^^^^^^^^^^^^^^^^^^
 # Compiler and linker setup
 # ^^^^^^^^^^^^^^^^^^^^^^^^^
-add_compile_definitions(-DF_CPU=${F_CPU} -D${PROC_ID})
+add_compile_definitions(-DF_CPU=${F_CPU} -DBAUD=${BAUD} -DMCU="${MCU}" -D${PROC_ID})
 # mmcu MUST be passed to both the compiler and linker, this handle the linker
 add_compile_options(-mmcu=${MCU})
 add_link_options(-mmcu=${MCU})

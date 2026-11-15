@@ -75,3 +75,29 @@ function(avr_register_strip_target target)
     COMMENT "Stripping ${target} binary"
   )
 endfunction()
+
+# ##############################################################################
+# avr_register_print_size_target function adds a post build command to print the
+# size of the binary of the given target
+#
+# param target : name of the target to print size
+# ##############################################################################
+function(avr_register_print_size_target target)
+  find_program(SIZE_EXECUTABLE
+    NAMES size
+    HINTS ${CMAKE_SYSROOT}
+    PATH_SUFFIXES bin
+    NO_CACHE
+  )
+
+  if(SIZE_EXECUTABLE-NOTFOUND)
+    message(FATAL_ERROR "size not found in ${CMAKE_SYSROOT}")
+  endif()
+
+  add_custom_command(
+    TARGET ${target}
+    POST_BUILD
+    COMMAND ${SIZE_EXECUTABLE} $<TARGET_FILE:${target}>
+    COMMENT "Calculating size of ${target} binary"
+  )
+endfunction()

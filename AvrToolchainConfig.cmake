@@ -16,6 +16,14 @@ set(AVR_TOOLCHAIN_PATH
     ${AVR_TOOLCHAIN_PACKAGE_PREFIX_DIR}/avr-toolchain.cmake
     CACHE PATH "Path to AvrToolchain file")
 
+if(EXISTS ${AVR_TOOLCHAIN_PATH})
+  message(STATUS "AvrToolchain found!")
+  set(AvrToolchain_FOUND True)
+else()
+  message(STATUS "AvrToolchain not found!")
+  set(AvrToolchain_FOUND False)
+endif()
+
 # ##############################################################################
 # avr_select_board function sets up the processor, the crystal board frequency
 # and other specific board settings by including board specifications file
@@ -42,10 +50,28 @@ function(avr_init)
       PARENT_SCOPE)
 endfunction()
 
-if(EXISTS ${AVR_TOOLCHAIN_PATH})
-  message(STATUS "AvrToolchain found!")
-  set(AvrToolchain_FOUND True)
-else()
-  message(STATUS AvrToolchain not found!)
-  set(AvrToolchain_FOUND False)
-endif()
+# ##############################################################################
+# avr_register_strip_target function adds a post build command to strip the binary
+# of the given target
+#
+# param target : name of the target to strip
+# ##############################################################################
+function(avr_register_strip_target target)
+  find_program(AVR_STRIP_EXECUTABLE
+    NAMES avr-strip
+    HINTS ${CMAKE_SYSROOT}
+    PATH_SUFFIXES bin
+    NO_CACHE
+  )
+
+  if(AVR_STRIP_EXECUTABLE-NOTFOUND)
+    message(FATAL_ERROR "avr-strip not found in ${CMAKE_SYSROOT}")
+  endif()
+
+  add_custom_command(
+    TARGET ${target}
+    POST_BUILD
+    COMMAND ${AVR_STRIP_EXECUTABLE} $<TARGET_FILE:${target}>
+    COMMENT "Stripping ${target} binary"
+  )
+endfunction()

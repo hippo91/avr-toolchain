@@ -27,7 +27,7 @@ add_test(
 
 add_test(
   NAME ArduinoUnoBinaryTest
-  COMMAND file ${PLATFORM_TEST_PROJECT_BUILD_DIR}/TestArduinoUno | grep "Atmel AVR 9-bit"
+  COMMAND bash "-c" "file ${PLATFORM_TEST_PROJECT_BUILD_DIR}/TestArduinoUno | grep 'Atmel AVR 8-bit'"
   WORKING_DIRECTORY ${PLATFORM_TEST_PROJECT_BUILD_DIR}
 )
 

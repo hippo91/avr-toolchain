@@ -2,38 +2,52 @@ cmake_minimum_required(VERSION 3.13)
 
 file(STRINGS Version.txt AVR_TOOLCHAIN_VERSION)
 
-# Search for sysroot in the environment otherwise try to locate avr-gcc to
-# determine sysroot
+# Search for sysroot in the environment, then use standard CMake discovery
+# before falling back to common install prefixes. This is more robust than
+# hard-coding only /usr, /usr/local, and /opt/avr.
 if(NOT CMAKE_SYSROOT)
+  set(_avr_toolchain_hints)
   if(DEFINED ENV{AVR_TOOLCHAIN_PATH})
-    set(CMAKE_SYSROOT "$ENV{AVR_TOOLCHAIN_PATH}")
-    message(
-      STATUS
-        "AVR toolchain path from AVR_TOOLCHAIN_PATH environment variable: ${CMAKE_SYSROOT}"
-    )
-  elseif(DEFINED ENV{AVR_SYSROOT})
-    set(CMAKE_SYSROOT "$ENV{AVR_SYSROOT}")
-    message(
-      STATUS
-        "AVR toolchain path from AVR_SYSROOT environment variable: ${CMAKE_SYSROOT}"
-    )
-  else()
-    # Fall back to common installation paths
-    foreach(path IN ITEMS "/usr" "/usr/local" "/opt/avr")
-      if(EXISTS "${path}/bin/avr-gcc")
-        set(CMAKE_SYSROOT ${path})
-        message(STATUS "AVR toolchain found at: ${CMAKE_SYSROOT}")
-        break()
-      endif()
-    endforeach()
+    list(APPEND _avr_toolchain_hints "$ENV{AVR_TOOLCHAIN_PATH}")
   endif()
+  if(DEFINED ENV{AVR_SYSROOT})
+    list(APPEND _avr_toolchain_hints "$ENV{AVR_SYSROOT}")
+  endif()
+  if(CMAKE_PREFIX_PATH)
+    list(APPEND _avr_toolchain_hints ${CMAKE_PREFIX_PATH})
+  endif()
+  list(APPEND _avr_toolchain_hints "/usr" "/usr/local" "/opt/avr")
 
-  if(NOT CMAKE_SYSROOT)
-    message(
-      FATAL_ERROR
-        "AVR toolchain not found. Please set CMAKE_SYSROOT manually or set the AVR_TOOLCHAIN_PATH or AVR_SYSROOT environment variable."
-    )
+  find_program(AVR_GCC_EXECUTABLE
+    NAMES avr-gcc
+    HINTS ${_avr_toolchain_hints}
+    PATH_SUFFIXES bin
+    NO_CACHE
+  )
+
+  if(AVR_GCC_EXECUTABLE)
+    get_filename_component(_avr_gcc_bin_dir "${AVR_GCC_EXECUTABLE}" DIRECTORY)
+    get_filename_component(AVR_TOOLCHAIN_PREFIX "${_avr_gcc_bin_dir}" DIRECTORY)
+
+    if(EXISTS "${AVR_TOOLCHAIN_PREFIX}/bin/avr-gcc")
+      set(CMAKE_SYSROOT "${AVR_TOOLCHAIN_PREFIX}")
+      message(STATUS "AVR toolchain found at: ${CMAKE_SYSROOT}")
+    endif()
   endif()
+endif()
+
+if(NOT CMAKE_SYSROOT)
+  message(
+    FATAL_ERROR
+      "AVR toolchain not found. Please set CMAKE_SYSROOT manually or set the AVR_TOOLCHAIN_PATH or AVR_SYSROOT environment variable."
+  )
+endif()
+
+if(NOT EXISTS "${CMAKE_SYSROOT}/bin/avr-gcc")
+  message(
+    FATAL_ERROR
+      "CMAKE_SYSROOT does not contain an AVR GCC installation: ${CMAKE_SYSROOT}"
+  )
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in

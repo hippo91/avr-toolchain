@@ -30,5 +30,16 @@ add_test(
   WORKING_DIRECTORY ${PLATFORM_TEST_PROJECT_BUILD_DIR}
 )
 
+add_test(
+  NAME ArduinoUnoRunTest
+  COMMAND bash "${CMAKE_SOURCE_DIR}/tests/test_wrapper.sh" "--test-exe" "${PLATFORM_TEST_PROJECT_BUILD_DIR}/TestArduinoUno"
+)
+
+set_tests_properties(ArduinoUnoRunTest
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "SIMAVR: IOPORT @0x2b<-0x0\n\nSIMAVR: IOPORT @0x2b<-0x8"
+)
+
 set_tests_properties(ArduinoUnoBuildTest PROPERTIES DEPENDS ArduinoUnoConfigurationTest)
 set_tests_properties(ArduinoUnoBinaryTest PROPERTIES DEPENDS ArduinoUnoBuildTest)
+set_tests_properties(ArduinoUnoRunTest PROPERTIES DEPENDS ArduinoUnoBinaryTest)

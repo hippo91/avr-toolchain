@@ -31,7 +31,7 @@ add_test(
 )
 
 configure_file(
-  ${CMAKE_CURRENT_LIST_DIR}/../test_wrapper.sh.in
+  ${CMAKE_CURRENT_LIST_DIR}/test_wrapper.sh.in
   ${PLATFORM_TEST_PROJECT_BUILD_DIR}/test_wrapper.sh
   @ONLY)
 

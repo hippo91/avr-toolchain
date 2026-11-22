@@ -27,7 +27,7 @@ if [ ! -f "$TEST_EXE" ]; then
 fi
 
 # TODO : find simavr through CMake Find module
-simavr -f @F_CPU@ -m @MCU@ "${TEST_EXE}" &
+simavr -f 16000000 -m atmega328p "${TEST_EXE}" &
 
 SIMAVR_PID="$!"
 sleep 1

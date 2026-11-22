@@ -8,9 +8,6 @@ cmake_minimum_required( VERSION 3.10 )
 # Project name
 project("Atmega328p blink test" VERSION 1.0.0)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../test_wrapper.sh.in
-               ${CMAKE_CURRENT_BINARY_DIR}/test_wrapper.sh @ONLY)
-
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

@@ -32,7 +32,7 @@ add_test(
 
 add_test(
   NAME ArduinoUnoRunTest
-  COMMAND bash "${CMAKE_SOURCE_DIR}/tests/test_wrapper.sh" "--test-exe" "${PLATFORM_TEST_PROJECT_BUILD_DIR}/TestArduinoUno"
+  COMMAND bash "${PLATFORM_TEST_PROJECT_BUILD_DIR}/test_wrapper.sh" "--test-exe" "${PLATFORM_TEST_PROJECT_BUILD_DIR}/TestArduinoUno"
 )
 
 set_tests_properties(ArduinoUnoRunTest

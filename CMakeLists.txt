@@ -100,6 +100,7 @@ install(
         "${CMAKE_CURRENT_SOURCE_DIR}/AvrToolchainConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/AvrToolchainConfigVersion.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/ArduinoUnoConfig.cmake"
+        "${CMAKE_CURRENT_SOURCE_DIR}/attiny84Config.cmake"
   DESTINATION ${qualified_install_cmakedir})
 
 

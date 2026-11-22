@@ -4,3 +4,4 @@ find_program(SIMAVR_EXECUTABLE
 )
 
 add_subdirectory(ArduinoUno)
+add_subdirectory(attiny84)

@@ -1,7 +1,3 @@
-#ifndef F_CPU
-#define F_CPU 16000000L
-#endif
-
 #include <assert.h>
 #include <avr/io.h>
 #include <stdio.h>
@@ -15,12 +11,6 @@ static_assert(BLINK_FREQ > 0, "Please select a strictly positive integer frequen
 #ifndef LED_PIN
 #define LED_PIN PD3
 #endif
-
-uint32_t ToMilliSeconds(const uint16_t duration, const uint32_t prescaler) 
-{
-  uint32_t res = duration * prescaler * 1000UL / F_CPU;
-  return res; 
-}
 
 typedef struct {
   const uint8_t register_bitmask[5];
@@ -58,8 +48,6 @@ int main(void)
 
   // Setup: set the LED_PIN as an output pin
   DDRD |= (1<<LED_PIN);
-  // Setup: set the PD6 pin as an input pin
-  DDRD |= (0<<PD6);
 
   // Compute the period in milliseconds
   int period_ms = (int) 1000. / BLINK_FREQ;
@@ -69,14 +57,6 @@ int main(void)
 
   while(1)
   {
-    // Check the state of the PD6 pin
-    if (PIND & ((1<<PD6))) {
-      start = TCNT1;
-      _delay_ms(149);
-      duration = TCNT1 - start;
-      char msg[1024];
-      sprintf(msg, "%u ticks = Duration is %lu ms", duration, ToMilliSeconds(duration, get_prescaler_value(&TCCR1B_PRESCALER)));
-    }
     // Set the PIN in HIGH state
     PORTD |= (1<<LED_PIN);
     // Wait for half period

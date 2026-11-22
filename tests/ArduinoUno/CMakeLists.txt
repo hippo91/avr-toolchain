@@ -30,9 +30,14 @@ add_test(
   WORKING_DIRECTORY ${PLATFORM_TEST_PROJECT_BUILD_DIR}
 )
 
+configure_file(
+  ${CMAKE_CURRENT_LIST_DIR}/../test_wrapper.sh.in
+  ${PLATFORM_TEST_PROJECT_BUILD_DIR}/test_wrapper.sh
+  @ONLY)
+
 add_test(
   NAME ArduinoUnoRunTest
-  COMMAND bash "${CMAKE_CURRENT_LIST_DIR}/test_wrapper.sh" "--test-exe" "${PLATFORM_TEST_PROJECT_BUILD_DIR}/TestArduinoUno"
+  COMMAND bash "${PLATFORM_TEST_PROJECT_BUILD_DIR}/test_wrapper.sh" "--test-exe" "${PLATFORM_TEST_PROJECT_BUILD_DIR}/TestArduinoUno"
 )
 
 set_tests_properties(ArduinoUnoRunTest

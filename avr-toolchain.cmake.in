@@ -1,8 +1,8 @@
 # Use AVR GCC toolchain
 set(CMAKE_SYSTEM_NAME Generic)
-set(CMAKE_CXX_COMPILER avr-g++)
+set(CMAKE_CXX_COMPILER @AVR_G++_EXECUTABLE@)
 set(CMAKE_C_COMPILER avr-gcc)
-set(CMAKE_ASM_COMPILER avr-gcc)
+set(CMAKE_ASM_COMPILER @AVR_GCC_EXECUTABLE@)
 
 # where is the target environment located
 set(CMAKE_SYSROOT @CMAKE_SYSROOT@)

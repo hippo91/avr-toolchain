@@ -23,6 +23,7 @@ if(NOT CMAKE_SYSROOT)
     HINTS ${_avr_toolchain_hints}
     PATH_SUFFIXES bin
     NO_CACHE
+    REQUIRED
   )
 
   if(AVR_GCC_EXECUTABLE)
@@ -49,6 +50,13 @@ if(NOT EXISTS "${CMAKE_SYSROOT}/bin/avr-gcc")
       "CMAKE_SYSROOT does not contain an AVR GCC installation: ${CMAKE_SYSROOT}"
   )
 endif()
+
+find_program(AVR_G++_EXECUTABLE 
+  NAMES avr-g++
+  HINTS ${_avr_toolchain_hints}
+  PATH_SUFFIXES bin
+  NO_CACHE
+)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/avr-toolchain.cmake @ONLY)

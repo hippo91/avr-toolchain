@@ -38,7 +38,7 @@ The package is installed in a project-specific CMake directory. Pass that direct
 For an Arduino Uno project, use this ordering in `CMakeLists.txt`: initialize the toolchain and select the board before calling `project()`.
 
 ```cmake
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.21)
 
 find_package(AvrToolchain REQUIRED)
 avr_init()
@@ -50,6 +50,8 @@ add_executable(myapp main.c)
 ```
 
 Use `LANGUAGES C` instead if the project is C-only. Projects enabling `CXX` require `avr-g++` in the AVR toolchain prefix.
+
+If the project discovers AVR dependencies with CMake, set `CMAKE_FIND_ROOT_PATH` to their target root, for example `-DCMAKE_FIND_ROOT_PATH=/path/to/avr/dependencies`. This controls CMake's dependency searches without changing compiler flags. Set `CMAKE_SYSROOT` only when you have an actual compiler sysroot; it also passes `--sysroot` to the compiler. With neither root configured, CMake won't fall back to host libraries, headers, or packages.
 
 Configure and build it with:
 

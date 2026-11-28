@@ -8,8 +8,11 @@ set(AVR_TOOLCHAIN_PREFIX "@AVR_TOOLCHAIN_PREFIX@")
 # where to install cross-compiled files
 set(CMAKE_STAGING_PREFIX @CMAKE_INSTALL_PREFIX@)
 
-# Search for build tools in the host environment.
+# Build tools run on the host; dependencies must be found in the target root.
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 add_compile_options(
   -Os # Optimize for code size (rather than speed) Doc:

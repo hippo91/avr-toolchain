@@ -6,7 +6,7 @@ avr_select_board(attiny84)
 cmake_minimum_required( VERSION 3.10 )
 # Largely inspired from https://www.kuon.ch/post/2018-07-11-avr-cmake/
 # Project name
-project("attiny84 blink test" VERSION 1.0.0)
+project("attiny84 blink test" VERSION 1.0.0 LANGUAGES C)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

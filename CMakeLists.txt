@@ -41,10 +41,10 @@ get_filename_component(AVR_TOOLCHAIN_PREFIX "${AVR_TOOLCHAIN_PREFIX}" ABSOLUTE)
 set(AVR_GCC_EXECUTABLE "${AVR_TOOLCHAIN_PREFIX}/bin/avr-gcc")
 set(AVR_GXX_EXECUTABLE "${AVR_TOOLCHAIN_PREFIX}/bin/avr-g++")
 
-if(NOT EXISTS "${AVR_GCC_EXECUTABLE}" OR NOT EXISTS "${AVR_GXX_EXECUTABLE}")
+if(NOT EXISTS "${AVR_GCC_EXECUTABLE}")
   message(
     FATAL_ERROR
-      "AVR_TOOLCHAIN_PREFIX must contain bin/avr-gcc and bin/avr-g++: ${AVR_TOOLCHAIN_PREFIX}"
+      "AVR_TOOLCHAIN_PREFIX must contain bin/avr-gcc: ${AVR_TOOLCHAIN_PREFIX}"
   )
 endif()
 
@@ -59,7 +59,10 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in
 # - Validates that pointer size is 2 bytes
 # - Generates correct architecture specifications for downstream projects
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/avr-toolchain.cmake")
-project("avr toolchain (for Arduino and others)" VERSION "${AVR_TOOLCHAIN_VERSION}")
+project("avr toolchain (for Arduino and others)"
+  VERSION "${AVR_TOOLCHAIN_VERSION}"
+  LANGUAGES C
+)
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
   message(

@@ -1,23 +1,14 @@
 # Use AVR GCC toolchain
 set(CMAKE_SYSTEM_NAME Generic)
-set(CMAKE_CXX_COMPILER @AVR_G++_EXECUTABLE@)
-set(CMAKE_C_COMPILER avr-gcc)
-set(CMAKE_ASM_COMPILER @AVR_GCC_EXECUTABLE@)
-
-# where is the target environment located
-set(CMAKE_SYSROOT @CMAKE_SYSROOT@)
+set(CMAKE_CXX_COMPILER "@AVR_GXX_EXECUTABLE@")
+set(CMAKE_C_COMPILER "@AVR_GCC_EXECUTABLE@")
+set(CMAKE_ASM_COMPILER "@AVR_GCC_EXECUTABLE@")
 
 # where to install cross-compiled files
 set(CMAKE_STAGING_PREFIX @CMAKE_INSTALL_PREFIX@)
 
-# adjust the default behavior of the FIND_XXX() commands: search programs in the
-# host environment
+# Search for build tools in the host environment.
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-
-# search headers and libraries in the target environment
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 add_compile_options(
   -Os # Optimize for code size (rather than speed) Doc:

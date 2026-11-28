@@ -2,10 +2,8 @@ cmake_minimum_required(VERSION 3.13)
 
 file(STRINGS Version.txt AVR_TOOLCHAIN_VERSION)
 
-# Search for sysroot in the environment, then use standard CMake discovery
-# before falling back to common install prefixes. This is more robust than
-# hard-coding only /usr, /usr/local, and /opt/avr.
-if(NOT CMAKE_SYSROOT)
+# Find the AVR GCC installation prefix.
+if(NOT AVR_TOOLCHAIN_PREFIX)
   set(_avr_toolchain_hints)
   if(DEFINED ENV{AVR_TOOLCHAIN_PATH})
     list(APPEND _avr_toolchain_hints "$ENV{AVR_TOOLCHAIN_PATH}")
@@ -28,35 +26,29 @@ if(NOT CMAKE_SYSROOT)
 
   if(AVR_GCC_EXECUTABLE)
     get_filename_component(_avr_gcc_bin_dir "${AVR_GCC_EXECUTABLE}" DIRECTORY)
-    get_filename_component(AVR_TOOLCHAIN_PREFIX "${_avr_gcc_bin_dir}" DIRECTORY)
-
-    if(EXISTS "${AVR_TOOLCHAIN_PREFIX}/bin/avr-gcc")
-      set(CMAKE_SYSROOT "${AVR_TOOLCHAIN_PREFIX}")
-      message(STATUS "AVR toolchain found at: ${CMAKE_SYSROOT}")
-    endif()
+    get_filename_component(AVR_TOOLCHAIN_PREFIX "${_avr_gcc_bin_dir}/.." ABSOLUTE)
   endif()
 endif()
 
-if(NOT CMAKE_SYSROOT)
+if(NOT AVR_TOOLCHAIN_PREFIX)
   message(
     FATAL_ERROR
-      "AVR toolchain not found. Please set CMAKE_SYSROOT manually or set the AVR_TOOLCHAIN_PATH or AVR_SYSROOT environment variable."
+      "AVR toolchain not found. Please set AVR_TOOLCHAIN_PREFIX or set the AVR_TOOLCHAIN_PATH or AVR_SYSROOT environment variable."
   )
 endif()
 
-if(NOT EXISTS "${CMAKE_SYSROOT}/bin/avr-gcc")
+get_filename_component(AVR_TOOLCHAIN_PREFIX "${AVR_TOOLCHAIN_PREFIX}" ABSOLUTE)
+set(AVR_GCC_EXECUTABLE "${AVR_TOOLCHAIN_PREFIX}/bin/avr-gcc")
+set(AVR_GXX_EXECUTABLE "${AVR_TOOLCHAIN_PREFIX}/bin/avr-g++")
+
+if(NOT EXISTS "${AVR_GCC_EXECUTABLE}" OR NOT EXISTS "${AVR_GXX_EXECUTABLE}")
   message(
     FATAL_ERROR
-      "CMAKE_SYSROOT does not contain an AVR GCC installation: ${CMAKE_SYSROOT}"
+      "AVR_TOOLCHAIN_PREFIX must contain bin/avr-gcc and bin/avr-g++: ${AVR_TOOLCHAIN_PREFIX}"
   )
 endif()
 
-find_program(AVR_G++_EXECUTABLE 
-  NAMES avr-g++
-  HINTS ${_avr_toolchain_hints}
-  PATH_SUFFIXES bin
-  NO_CACHE
-)
+message(STATUS "AVR toolchain found at: ${AVR_TOOLCHAIN_PREFIX}")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/avr-toolchain.cmake @ONLY)

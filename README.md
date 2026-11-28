@@ -18,13 +18,13 @@ git clone https://github.com/hippo91/avr-toolchain.git
 cd avr-toolchain
 cmake -S . -B build \
    -DCMAKE_INSTALL_PREFIX=/usr/local \
-   -DCMAKE_SYSROOT=/path/to/avr/gcc
+   -DAVR_TOOLCHAIN_PREFIX=/path/to/avr/gcc
 cmake --install build
 ```
 
 This repository does not build a library or executable, so `cmake --build` is not needed. Configuration generates the toolchain file, and installation places it and the CMake package files under `${CMAKE_INSTALL_LIBDIR}/AvrToolchain/cmake` (typically `/usr/local/lib/AvrToolchain/cmake`). The configured install prefix is also used as `CMAKE_STAGING_PREFIX` by AVR projects using this toolchain.
 
-If `CMAKE_SYSROOT` is omitted, configuration searches for `avr-gcc` using the `AVR_TOOLCHAIN_PATH` and `AVR_SYSROOT` environment variables, `CMAKE_PREFIX_PATH`, the system `PATH`, and common prefixes such as `/usr`, `/usr/local`, and `/opt/avr`. For example, set one of these environment variables to the AVR GCC installation prefix before configuring:
+If `AVR_TOOLCHAIN_PREFIX` is omitted, configuration searches for `avr-gcc` using the `AVR_TOOLCHAIN_PATH` and `AVR_SYSROOT` environment variables, `CMAKE_PREFIX_PATH`, the system `PATH`, and common prefixes such as `/usr`, `/usr/local`, and `/opt/avr`. `CMAKE_SYSROOT` is separate and should only be set when you have an actual target sysroot; it is not an AVR GCC installation prefix. For example, set one of these environment variables to the AVR GCC installation prefix before configuring:
 
 ```sh
 export AVR_SYSROOT=/path/to/avr/gcc

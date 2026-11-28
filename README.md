@@ -5,7 +5,7 @@ This project provides a CMake toolchain for cross-compiling AVR microcontroller 
 ## Requirements
 
 - CMake 3.13 or newer.
-- AVR GCC, including `avr-gcc` and `avr-g++`.
+- AVR GCC with `avr-gcc`; `avr-g++` is only needed for projects that enable C++.
 
 The AVR GCC installation prefix is the directory containing `bin/avr-gcc` (for example, `/usr`).
 
@@ -48,6 +48,8 @@ project(MyAvrProject LANGUAGES C CXX)
 
 add_executable(myapp main.c)
 ```
+
+Use `LANGUAGES C` instead if the project is C-only. Projects enabling `CXX` require `avr-g++` in the AVR toolchain prefix.
 
 Configure and build it with:
 

@@ -62,13 +62,13 @@ endfunction()
 function(avr_register_strip_target target)
   find_program(AVR_STRIP_EXECUTABLE
     NAMES avr-strip
-    HINTS ${CMAKE_SYSROOT}
+    HINTS ${AVR_TOOLCHAIN_PREFIX}
     PATH_SUFFIXES bin
     NO_CACHE
   )
 
   if(AVR_STRIP_EXECUTABLE-NOTFOUND)
-    message(FATAL_ERROR "avr-strip not found in ${CMAKE_SYSROOT}")
+    message(FATAL_ERROR "avr-strip not found in ${AVR_TOOLCHAIN_PREFIX}")
   endif()
 
   add_custom_command(
@@ -87,14 +87,14 @@ endfunction()
 # ##############################################################################
 function(avr_register_print_size_target target)
   find_program(SIZE_EXECUTABLE
-    NAMES size
-    HINTS ${CMAKE_SYSROOT}
+    NAMES avr-size
+    HINTS ${AVR_TOOLCHAIN_PREFIX}
     PATH_SUFFIXES bin
     NO_CACHE
   )
 
   if(SIZE_EXECUTABLE-NOTFOUND)
-    message(FATAL_ERROR "size not found in ${CMAKE_SYSROOT}")
+    message(FATAL_ERROR "size not found in ${AVR_TOOLCHAIN_PREFIX}")
   endif()
 
   add_custom_command(

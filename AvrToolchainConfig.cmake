@@ -67,7 +67,7 @@ function(avr_register_strip_target target)
     NO_CACHE
   )
 
-  if(AVR_STRIP_EXECUTABLE-NOTFOUND)
+  if(NOT AVR_STRIP_EXECUTABLE)
     message(FATAL_ERROR "avr-strip not found in ${AVR_TOOLCHAIN_PREFIX}")
   endif()
 
@@ -86,21 +86,21 @@ endfunction()
 # param target : name of the target to print size
 # ##############################################################################
 function(avr_register_print_size_target target)
-  find_program(SIZE_EXECUTABLE
+  find_program(AVR_SIZE_EXECUTABLE
     NAMES avr-size
     HINTS ${AVR_TOOLCHAIN_PREFIX}
     PATH_SUFFIXES bin
     NO_CACHE
   )
 
-  if(SIZE_EXECUTABLE-NOTFOUND)
-    message(FATAL_ERROR "size not found in ${AVR_TOOLCHAIN_PREFIX}")
+  if(NOT AVR_SIZE_EXECUTABLE)
+    message(FATAL_ERROR "avr-size not found in ${AVR_TOOLCHAIN_PREFIX}")
   endif()
 
   add_custom_command(
     TARGET ${target}
     POST_BUILD
-    COMMAND ${SIZE_EXECUTABLE} $<TARGET_FILE:${target}>
+    COMMAND ${AVR_SIZE_EXECUTABLE} $<TARGET_FILE:${target}>
     COMMENT "Calculating size of ${target} binary"
   )
 endfunction()

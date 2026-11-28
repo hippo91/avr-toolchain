@@ -4,7 +4,7 @@ This project provides a CMake toolchain for cross-compiling AVR microcontroller 
 
 ## Requirements
 
-- CMake 3.13 or newer.
+- CMake 3.21 or newer.
 - AVR GCC with `avr-gcc`; `avr-g++` is only needed for projects that enable C++.
 
 The AVR GCC installation prefix is the directory containing `bin/avr-gcc` (for example, `/usr`).
@@ -78,9 +78,9 @@ Compile application code and source-built libraries with the same toolchain sett
 
 ## Troubleshooting
 
-- **AVR toolchain not found:** Set `CMAKE_SYSROOT` to the AVR GCC installation prefix, or set `AVR_TOOLCHAIN_PATH` or `AVR_SYSROOT` in the environment. The prefix should contain `bin/avr-gcc`.
+- **AVR toolchain not found:** Set `AVR_TOOLCHAIN_PREFIX` to the AVR GCC installation prefix, or set `AVR_TOOLCHAIN_PATH` or `AVR_SYSROOT` in the environment. The prefix should contain `bin/avr-gcc`.
 - **`find_package` cannot find `AvrToolchain`:** Set `AvrToolchain_DIR` to the installed `AvrToolchain/cmake` directory, such as `/usr/local/lib/AvrToolchain/cmake`.
-- **Pointer-size check fails:** This toolchain requires an AVR compiler that reports 2-byte pointers. Check that `CMAKE_SYSROOT` points to the intended AVR GCC installation and that its compiler can compile and link test programs.
+- **Pointer-size check fails:** This toolchain requires an AVR compiler that reports 2-byte pointers. Check that `AVR_TOOLCHAIN_PREFIX` points to the intended AVR GCC installation and that its compiler can compile and link test programs.
 
 ## Files
 

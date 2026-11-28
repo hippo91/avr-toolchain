@@ -61,7 +61,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/avr-toolchain.cmake.in
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/avr-toolchain.cmake")
 project("avr toolchain (for Arduino and others)"
   VERSION "${AVR_TOOLCHAIN_VERSION}"
-  LANGUAGES C
+  LANGUAGES C # Only C is required for the size of pointer check, but C++ is also supported for downstream projects
 )
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
